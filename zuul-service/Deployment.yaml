@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cloud-demo
+  name: zuul-service
+  labels:
+    app: zuul-service
+    tire: backend
+    release: stable
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: zuul-service
+      labels:
+        app: zuul-service
+        tire: backend
+        release: stable
+    spec:
+      containers:
+        - name: zuul-service
+          image: registry.cn-hangzhou.aliyuncs.com/ift/zuul-service:0.0.1
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/info
+            initialDelaySeconds: 20
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/info
+            initialDelaySeconds: 20
+          args:
+            - --spring.profiles.active=prod
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: zuul-service
+      tire: backend
+      release: stable
+  revisionHistoryLimit: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: cloud-demo
+  name: zuul-svc
+spec:
+  selector:
+    app: zuul-service
+    tire: backend
+    release: stable
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: cloud-demo
+  name: zuul-service-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: zuul.kube.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: zuul-svc
+            servicePort: 8080

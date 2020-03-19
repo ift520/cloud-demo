@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka-service
+  namespace: cloud-demo
+  labels:
+    app: eureka-service
+    tire: backend
+    release: stable
+spec:
+  selector:
+    matchLabels:
+      app: eureka-service
+      tire: backend
+      release: stable
+  revisionHistoryLimit: 10
+  replicas: 3
+  serviceName: eureka-svc
+  template:
+    metadata:
+      name: eureka-service
+      labels:
+        app: eureka-service
+        tire: backend
+        release: stable
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SERVICE_NAME
+          value: "eureka-svc"
+        - name: EUREKA_REPLICAS
+          value: "3"
+        - name: EUREKA_APPLICATION_NAME
+          value: "eureka-service"
+        - name: EUREKA_PORT
+          value: "8081"
+        name: eureka-service
+        image: registry.cn-hangzhou.aliyuncs.com/ift/eureka-service:0.0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 8081
+        readinessProbe:
+          httpGet:
+            port: http
+            path: /actuator/info
+          initialDelaySeconds: 20
+        livenessProbe:
+          httpGet:
+            port: http
+            path: /actuator/info
+          initialDelaySeconds: 20
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: cloud-demo
+  name: eureka-svc
+spec:
+  clusterIP: None
+  selector:
+    app: eureka-service
+    tire: backend
+    release: stable
+  ports:
+  - port: 8081
+    targetPort: 8081
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  namespace: cloud-demo
+#  name: eureka-svc-external
+#spec:
+#  selector:
+#    app: eureka-service
+#    tire: backend
+#    release: stable
+#  ports:
+#  - port: 8081
+#    targetPort: 8081
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: cloud-demo
+  name: eureka-service-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: eureka.kube.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: eureka-svc
+          servicePort: 8081

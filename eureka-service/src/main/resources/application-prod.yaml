@@ -1,0 +1,11 @@
+eureka:
+  instance:
+    hostname: ${EUREKA_HOSTNAME:127.0.0.1}
+  client:
+    #注册地址
+    service-url:
+      defaultZone: ${EUREKA_URL_LIST:http://${eureka.instance.hostname}:${server.port}/eureka/}
+    #是否需要将自己注册到自己的注册中心默认为true，集群需要开启
+    register-with-eureka: ${REGISTER_WITH_EUREKA:true}
+    #是否需要去检索服务信息
+    fetch-registry: ${FETCH_REGISTRY:true}

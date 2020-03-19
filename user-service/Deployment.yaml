@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cloud-demo
+  name: user-service
+  annotations:
+    kubernetes.io/change-cause: 0.0.1
+  labels:
+    app: user-service
+    tire: backend
+    release: stable
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: user-service
+      labels:
+        app: user-service
+        tire: backend
+        release: stable
+    spec:
+      containers:
+        - name: user-service
+          image: registry.cn-hangzhou.aliyuncs.com/ift/user-service:0.0.1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: date-config
+            mountPath: /etc/localtime
+          readinessProbe:
+            httpGet:
+              port: 8082
+              path: /actuator/info
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              port: 8082
+              path: /actuator/info
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          args:
+            - --spring.profiles.active=prod
+      restartPolicy: Always
+      volumes:
+      - name: date-config
+        hostPath: 
+          path: /etc/localtime
+  selector:
+    matchLabels:
+      app: user-service
+      tire: backend
+      release: stable
+  revisionHistoryLimit: 10
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  namespace: cloud-demo
+#  name: user-svc
+#spec:
+#  selector:
+#    app: user-service
+#    tire: backend
+#    release: stable
+#  ports:
+#    - port: 8082
+#      targetPort: 8082

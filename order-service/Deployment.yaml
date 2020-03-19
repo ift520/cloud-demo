@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cloud-demo
+  name: order-service
+  annotations:
+    kubernetes.io/change-cause: 0.0.1
+  labels:
+    app: order-service
+    tire: backend
+    release: stable
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: order-service
+      labels:
+        app: order-service
+        tire: backend
+        release: stable
+    spec:
+      containers:
+        - name: order-service
+          image: registry.cn-hangzhou.aliyuncs.com/ift/order-service:0.0.1
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              port: 8083
+              path: /actuator/info
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              port: 8083
+              path: /actuator/info
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          args:
+            - --spring.profiles.active=prod
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: order-service
+      tire: backend
+      release: stable
+  revisionHistoryLimit: 10
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  namespace: cloud-demo
+#  name: order-svc
+#spec:
+#  selector:
+#    app: order-service
+#    tire: backend
+#    release: stable
+#  ports:
+#    - port: 8083
+#      targetPort: 8083
+#
