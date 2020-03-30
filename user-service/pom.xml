@@ -9,13 +9,6 @@
     </parent>
     <artifactId>user-service</artifactId>
     <version>0.0.2</version>
-    <name>user-service</name>
-    <description>Spring Cloud User Service</description>
-
-    <properties>
-        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <docker.registry.name.prefix>registry.cn-hangzhou.aliyuncs.com/ift</docker.registry.name.prefix>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -26,35 +19,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-plugin.version}</version>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <goals>-->
-<!--                            &lt;!&ndash;如果package时不想用docker打包,就注释掉这个goal&ndash;&gt;-->
-<!--                            <goal>build</goal>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-                <configuration>
-                    <repository>${docker.registry.name.prefix}/${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
-                    <buildArgs>
-                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                    <username>18883362542</username>
-                    <password>0420Aliyun.</password>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

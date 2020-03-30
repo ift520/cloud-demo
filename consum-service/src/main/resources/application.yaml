@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: consum-service
+server:
+  port: 8200
