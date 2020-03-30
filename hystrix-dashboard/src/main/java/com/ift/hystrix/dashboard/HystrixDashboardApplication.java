@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
  * HystrixDashboard
  *
  * @author liufei
- * @since 2020/3/30
+ * @since 0.0.1
  */
 @SpringBootApplication
 @EnableHystrixDashboard

@@ -11,7 +11,7 @@ import java.util.List;
  * 消费方熔断
  *
  * @author liufei
- * @since 2020/3/30
+ * @since 0.0.1
  */
 public class ConsumHystrixCommand extends HystrixCommand<List> {
 

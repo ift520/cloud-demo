@@ -8,7 +8,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
  * 服务提供方
  *
  * @author liufei
- * @since 2020/3/30
+ * @since 0.0.1
  */
 @SpringBootApplication
 @EnableCircuitBreaker

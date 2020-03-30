@@ -9,7 +9,7 @@ import java.util.Map;
  * 用户FeignClient
  *
  * @author liufei
- * @since 2020/2/24
+ * @since 0.0.1
  */
 @FeignClient(value = "user-service")
 public interface UserFeignClient {
