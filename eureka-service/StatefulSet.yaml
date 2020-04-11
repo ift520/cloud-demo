@@ -63,6 +63,7 @@ spec:
             port: http
             path: /actuator/info
           initialDelaySeconds: 20
+        command: ["/bin/bash", "-c", "/init.sh"]
       restartPolicy: Always
 ---
 apiVersion: v1

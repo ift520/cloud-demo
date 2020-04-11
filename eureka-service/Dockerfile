@@ -9,4 +9,4 @@ RUN rm -rf /etc/localtime \
 && echo "Asia/Shanghai" > /etc/timezone
 ARG JAR_FILE
 ADD ${JAR_FILE} /usr/home/app.jar
-ENTRYPOINT ["/bin/bash", "-c", "/init.sh"]
+ENTRYPOINT ["java", "-jar", "/usr/home/app.jar"]
