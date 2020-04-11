@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 suffix=svc.cluster.local
 EUREKA_HOSTNAME="$POD_NAME.$SERVICE_NAME.$POD_NAMESPACE.$suffix"
 REGISTER_WITH_EUREKA="true"
