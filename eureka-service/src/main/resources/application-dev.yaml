@@ -1,10 +1,10 @@
 eureka:
   instance:
-    hostname: 127.0.0.1
+    prefer-ip-address: true
   client:
     #注册地址
     service-url:
-      defaultZone: http://127.0.0.1:${server.port}/eureka
+      defaultZone: http://192.168.137.211:${server.port}/eureka/,http://192.168.137.212:${server.port}/eureka/
     #是否需要将自己注册到自己的注册中心默认为true，集群需要开启
     register-with-eureka: true
     #是否需要去检索服务信息

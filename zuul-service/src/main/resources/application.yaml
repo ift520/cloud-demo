@@ -10,10 +10,10 @@ zuul:
   prefix: /api
   #配置Header过滤，为空表示不过滤
   sensitive-headers:
-  routes:
-    order-service:
-      path: /order/**
-      service-id: order-service
-    user-service:
-      path: /user/**
-      service-id: user-service
+#  routes:
+#    order-service:
+#      path: /order/**
+#      service-id: order-service
+#    user-service:
+#      path: /user/**
+#      service-id: user-service

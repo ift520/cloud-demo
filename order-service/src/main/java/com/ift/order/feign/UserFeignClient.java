@@ -11,7 +11,7 @@ import java.util.Map;
  * @author liufei
  * @since 0.0.1
  */
-@FeignClient(value = "user-service")
+@FeignClient(value = "user-service", url = "${service.user-service.url:}")
 public interface UserFeignClient {
 
     @GetMapping("/name")

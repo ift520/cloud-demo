@@ -23,6 +23,7 @@ public class UserController {
         Map<String, String> result = new HashMap<>(2);
         result.put("username", "zhangsan");
         result.put("userSessionId", request.getSession().getId());
+        result.put("serverName", request.getServerName());
         return result;
     }
 
@@ -33,6 +34,6 @@ public class UserController {
 
     @GetMapping("/version")
     public String version() {
-        return "Version 2.0";
+        return "Version 1.0";
     }
 }

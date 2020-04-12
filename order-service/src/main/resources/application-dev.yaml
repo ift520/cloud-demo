@@ -4,9 +4,11 @@ eureka:
     lease-renewal-interval-in-seconds: 1
     #EurekaServer在收到最后一次心跳后的等待时间，超过则剔除EurekaClient（默认为90s，开发环境建议设置较小值）
     lease-expiration-duration-in-seconds: 2
-    hostname: 127.0.0.1
   client:
     service-url:
-      defaultZone: http://127.0.0.1:8081/eureka
+      defaultZone: http://192.168.137.211:8081/eureka/,http://192.168.137.212:8081/eureka/
     fetch-registry: true
     register-with-eureka: true
+service:
+  user-service:
+    url: http://192.168.137.212:8082
